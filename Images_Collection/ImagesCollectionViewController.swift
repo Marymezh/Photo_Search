@@ -9,9 +9,7 @@ import UIKit
 
 class ImagesCollectionViewController: UIViewController, UISearchBarDelegate {
     
-    private let accessKey = "keri2rejox5uSSLArjTOP5H7aYF16Up3XGqgjifsJd4"
-    
-    private var results: [Result] = []
+    private let networker = NetworkManager()
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -23,7 +21,6 @@ class ImagesCollectionViewController: UIViewController, UISearchBarDelegate {
         return searchBar
     }()
     
-
     private lazy var collectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(
@@ -64,48 +61,28 @@ class ImagesCollectionViewController: UIViewController, UISearchBarDelegate {
         NSLayoutConstraint.activate(constraints)
     }
     
-    func fetchPhotos(query: String) {
-        let urlString = "https://api.unsplash.com/search/photos?page=1&per_page=20&query=\(query)&client_id=\(accessKey)"
-        guard let url = URL(string: urlString) else {return}
-        let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            guard let data = data, error == nil else {return}
-            do {
-                let requestResults = try JSONDecoder().decode(APIResponse.self, from: data)
-                DispatchQueue.main.async {
-                    self?.results = requestResults.results
-                    self?.collectionView.reloadData()
-                }
-            }
-            
-            catch {
-                print(error.localizedDescription)
-            }
-        }
-        task.resume()
-    }
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let text = searchBar.text {
-            results = []
-            collectionView.reloadData()
-            fetchPhotos(query: text)
+            networker.results = []
+            networker.onDownload = {[weak self] in
+                self?.collectionView.reloadData()
+            }
+            networker.fetchPhotos(query: text)
         }
-        
     }
 }
 
 
 extension ImagesCollectionViewController: UICollectionViewDataSource {
     internal func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let imageURL = self.results[indexPath.row].urls.regular
+        let imageURL = networker.results[indexPath.row].urls.regular
         let cell: PhotosCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
         cell.configure(with: imageURL)
         return cell
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.results.count
+        return networker.results.count
     }
 }
 

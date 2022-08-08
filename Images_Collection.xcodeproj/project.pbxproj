@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1A76E2B628A10E5F00BCEF91 /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A76E2B528A10E5F00BCEF91 /* APIResponse.swift */; };
 		1A76E2B828A1254F00BCEF91 /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A76E2B728A1254F00BCEF91 /* PhotoCollectionViewCell.swift */; };
+		1A76E2BA28A1409800BCEF91 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A76E2B928A1409800BCEF91 /* NetworkManager.swift */; };
 		1AEDF29E284B4142008F2F8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDF29D284B4142008F2F8B /* AppDelegate.swift */; };
 		1AEDF2A0284B4142008F2F8B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDF29F284B4142008F2F8B /* SceneDelegate.swift */; };
 		1AEDF2A2284B4142008F2F8B /* ImagesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AEDF2A1284B4142008F2F8B /* ImagesCollectionViewController.swift */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		1A76E2B528A10E5F00BCEF91 /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		1A76E2B728A1254F00BCEF91 /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		1A76E2B928A1409800BCEF91 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		1AEDF29A284B4142008F2F8B /* Images_Collection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Images_Collection.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AEDF29D284B4142008F2F8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1AEDF29F284B4142008F2F8B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				1AEDF29D284B4142008F2F8B /* AppDelegate.swift */,
 				1AEDF29F284B4142008F2F8B /* SceneDelegate.swift */,
 				1AEDF2A1284B4142008F2F8B /* ImagesCollectionViewController.swift */,
+				1A76E2B928A1409800BCEF91 /* NetworkManager.swift */,
 				1A76E2B728A1254F00BCEF91 /* PhotoCollectionViewCell.swift */,
 				1A76E2B528A10E5F00BCEF91 /* APIResponse.swift */,
 				1AEDF2A3284B4143008F2F8B /* Main.storyboard */,
@@ -144,6 +147,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A76E2BA28A1409800BCEF91 /* NetworkManager.swift in Sources */,
 				1AEDF2A2284B4142008F2F8B /* ImagesCollectionViewController.swift in Sources */,
 				1AEDF29E284B4142008F2F8B /* AppDelegate.swift in Sources */,
 				1AEDF2A0284B4142008F2F8B /* SceneDelegate.swift in Sources */,
