@@ -12,10 +12,12 @@ class PhotosCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "PhotosCollectionViewCell"
     
-    private let collectionImageView: UIImageView = {
+    private let utilityQueue = DispatchQueue.global(qos: .utility)
+    
+    let collectionImageView: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
-        image.backgroundColor = .systemBackground 
+        image.backgroundColor = .systemBackground
         image.clipsToBounds = true
         image.layer.cornerRadius = 15
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -45,17 +47,25 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         collectionImageView.image = nil
     }
     
-    func configure(with urlString: String) {
-        guard let url = URL(string: urlString) else {return}
+    func configure(with urlString: String, completion: @escaping (UIImage?) ->()) {
         
-        let task = URLSession.shared.dataTask(with: url) {[weak self] data, _, error in
-            guard let data = data, error == nil else {return}
+        utilityQueue.async {
+            guard let url = URL(string: urlString) else {return}
             
-            DispatchQueue.main.async {
-                let image = UIImage(data: data)
-                self?.collectionImageView.image = image
+            let task = URLSession.shared.dataTask(with: url) {[weak self] data, _, error in
+                guard let self = self, let data = data, error == nil else {return}
+                
+                DispatchQueue.main.async {
+                    let image = UIImage(data: data)
+                    self.collectionImageView.image = image
+                    completion(image)
+                }
             }
+            
+            task.resume()
         }
-        task.resume()
+        
+        
+        
     }
 }

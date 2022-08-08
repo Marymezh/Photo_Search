@@ -11,6 +11,9 @@ class ImagesCollectionViewController: UIViewController, UISearchBarDelegate {
     
     private let networker = NetworkManager()
     
+    private let cache = NSCache<NSNumber, UIImage>()
+    
+    
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.backgroundColor = .systemBackground
@@ -64,8 +67,10 @@ class ImagesCollectionViewController: UIViewController, UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if let text = searchBar.text {
             networker.results = []
+            self.cache.removeAllObjects()
             networker.onDownload = {[weak self] in
-                self?.collectionView.reloadData()
+                guard let self = self else {return}
+                self.collectionView.reloadData()
             }
             networker.fetchPhotos(query: text)
         }
@@ -74,10 +79,24 @@ class ImagesCollectionViewController: UIViewController, UISearchBarDelegate {
 
 
 extension ImagesCollectionViewController: UICollectionViewDataSource {
-    internal func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let imageURL = networker.results[indexPath.row].urls.regular
         let cell: PhotosCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
-        cell.configure(with: imageURL)
+         let itemNumber = NSNumber(value: indexPath.item)
+         
+         if let cachedImage = self.cache.object(forKey: itemNumber) {
+             print ("Using a cached image for item: \(itemNumber)")
+             cell.collectionImageView.image = cachedImage
+             
+         } else {
+             
+             cell.configure(with: imageURL) { [weak self] (image) in
+                 guard let self = self, let image = image else {return}
+                 cell.collectionImageView.image = image
+                 self.cache.setObject(image, forKey: itemNumber)
+             }
+         }
+
         return cell
     }
     
